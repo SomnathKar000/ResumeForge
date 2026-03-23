@@ -61,8 +61,8 @@ resumeforge/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/resumeforge.git
-cd resumeforge
+git clone https://github.com/somnathkar000/ResumeForge.git
+cd ResumeForge
 ```
 
 ### 2. Install dependencies
@@ -83,7 +83,7 @@ ANTHROPIC_API_KEY=your_api_key_here
 Create a `.env` file in `apps/web/`:
 
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:4000
 ```
 
 ### 4. Run the project
@@ -94,7 +94,7 @@ npm run dev
 ```
 
 Frontend runs on → `http://localhost:5173`
-Backend runs on → `http://localhost:5000`
+Backend runs on → `http://localhost:4000`
 
 ---
 
