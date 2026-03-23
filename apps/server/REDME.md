@@ -94,7 +94,7 @@ Get your Claude API key → [console.anthropic.com](https://console.anthropic.co
 npm run dev
 ```
 
-Runs on → `http://localhost:5000`
+Runs on → `http://localhost:4000`
 
 ---
 
