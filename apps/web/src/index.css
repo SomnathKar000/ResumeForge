@@ -1,1 +1,85 @@
 @import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@theme {
+  /* ── Color Tokens (exact from Stitch) ── */
+  --color-background: #131313;
+  --color-on-background: #e5e2e1;
+  --color-surface: #131313;
+  --color-surface-dim: #131313;
+  --color-surface-bright: #3a3939;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container: #201f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-variant: #353534;
+  --color-surface-tint: #c2c1ff;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #c7c4d8;
+  --color-primary: #c2c1ff;
+  --color-primary-container: #615efe;
+  --color-primary-fixed: #e2dfff;
+  --color-primary-fixed-dim: #c2c1ff;
+  --color-on-primary: #1800a7;
+  --color-on-primary-container: #fffcff;
+  --color-on-primary-fixed: #0b006b;
+  --color-on-primary-fixed-variant: #2e22cf;
+  --color-inverse-primary: #4944e6;
+  --color-secondary: #7edd3a;
+  --color-secondary-container: #56b300;
+  --color-secondary-fixed: #99fb55;
+  --color-secondary-fixed-dim: #7edd3a;
+  --color-on-secondary: #173800;
+  --color-on-secondary-container: #193d00;
+  --color-on-secondary-fixed: #0a2000;
+  --color-on-secondary-fixed-variant: #245100;
+  --color-tertiary: #ffb4a8;
+  --color-tertiary-container: #ce4635;
+  --color-tertiary-fixed: #ffdad4;
+  --color-tertiary-fixed-dim: #ffb4a8;
+  --color-on-tertiary: #690000;
+  --color-on-tertiary-container: #fffdff;
+  --color-on-tertiary-fixed: #410000;
+  --color-on-tertiary-fixed-variant: #8d160c;
+  --color-outline: #908fa1;
+  --color-outline-variant: #464555;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+  --color-inverse-surface: #e5e2e1;
+  --color-inverse-on-surface: #313030;
+
+  /* ── Font Families ── */
+  --font-headline: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Inter', sans-serif;
+
+  /* ── Border Radius ── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+body {
+  background-color: #131313;
+  color: #e5e2e1;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #c2c1ff;
+  color: #0e0e0e;
+}
