@@ -1,16 +1,10 @@
-import { Router, Request, Response } from "express";
-import asyncHandler from "../../middlewares/asyncHandler";
+import { Router } from "express";
+import asyncHandler from "../../middlewares/async.handler";
+import { generateResume } from "../../controllers/resume.controller";
+import upload from "../../middlewares/upload.middleware";
 
 const router = Router();
 
-router.post(
-  "/generate",
-  asyncHandler((req: Request, res: Response) => {
-    res.json({
-      success: true,
-      message: "Resume generated successfully",
-    });
-  }),
-);
+router.post("/generate", upload.single("resume"), asyncHandler(generateResume));
 
 export default router;

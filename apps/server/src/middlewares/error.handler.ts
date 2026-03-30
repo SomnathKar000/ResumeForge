@@ -21,4 +21,11 @@ const errorHandler = (
   });
 };
 
-export default errorHandler;
+const notFoundHandler = (req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: "Api endpoint not found",
+  });
+};
+
+export { notFoundHandler, errorHandler };
