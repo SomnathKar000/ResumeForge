@@ -4,61 +4,63 @@
     <meta charset="UTF-8" />
     <title>{{NAME}} – Resume</title>
     <style>
-      /* ─── Page setup ─────────────────────────────────────────── */
+      /* ─── Page ───────────────────────────────────────────────── */
       @page {
         size: Letter;
-        margin: 0.45in 0.6in;
+        margin: 0.5in 0.65in;
       }
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      html, body {
-        width: 100%;
-        height: 100%;
-      }
-
       body {
-        font-family: "Times New Roman", Times, serif;
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 10pt;
-        line-height: 1.35;
+        line-height: 1.4;
         color: #000;
         background: #fff;
       }
 
+      a { color: #000; text-decoration: none; }
+
       /* ─── Header ─────────────────────────────────────────────── */
       #header {
         text-align: center;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
       }
 
       #name {
-        font-size: 18pt;
-        font-weight: bold;
+        font-size: 26pt;
+        font-weight: 900;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 3px;
+        letter-spacing: 1px;
+        line-height: 1.1;
+        margin-bottom: 4px;
+      }
+
+      #tagline {
+        font-size: 10pt;
+        font-weight: bold;
+        margin-bottom: 4px;
       }
 
       #contact {
         font-size: 9pt;
         color: #000;
-        line-height: 1.5;
       }
 
-      /* All links: black, no underline — ATS safe */
-      a { color: #000 !important; text-decoration: none !important; }
-
       /* ─── Section ────────────────────────────────────────────── */
-      .section { margin-top: 7px; }
+      .section {
+        margin-top: 10px;
+        margin-bottom: 2px;
+      }
 
       .section-title {
-        font-size: 10pt;
-        font-weight: bold;
+        font-size: 13pt;
+        font-weight: 900;
         text-transform: uppercase;
-        letter-spacing: 0.8px;
-        border-bottom: 1px solid #000;
-        padding-bottom: 1px;
-        margin-bottom: 5px;
+        border-bottom: 1.5px solid #000;
+        padding-bottom: 2px;
+        margin-bottom: 6px;
       }
 
       /* ─── Summary ────────────────────────────────────────────── */
@@ -67,24 +69,11 @@
         text-align: justify;
       }
 
-      /* ─── Skills ─────────────────────────────────────────────── */
-      .skill-row {
-        display: flex;
-        gap: 4px;
-        margin-bottom: 2px;
-        font-size: 9.5pt;
+      /* ─── Experience / Education ──────────────────────────────── */
+      .entry {
+        margin-bottom: 8px;
+        page-break-inside: avoid;
       }
-
-      .skill-category {
-        font-weight: bold;
-        white-space: nowrap;
-        min-width: 110px;
-      }
-
-      .skill-items { flex: 1; }
-
-      /* ─── Entry (Experience / Education / Certs) ──────────────── */
-      .entry { margin-bottom: 6px; }
 
       .entry-header {
         display: flex;
@@ -95,41 +84,61 @@
       .entry-left { flex: 1; }
 
       .entry-title {
-        font-weight: bold;
         font-size: 10pt;
+        font-weight: bold;
       }
 
       .entry-subtitle {
-        font-style: italic;
         font-size: 9.5pt;
+        font-weight: normal;
       }
 
       .entry-date {
         font-size: 9.5pt;
         white-space: nowrap;
-        margin-left: 6px;
+        margin-left: 8px;
+        font-weight: bold;
       }
 
       /* ─── Bullets ─────────────────────────────────────────────── */
       ul.bullets {
-        margin-top: 2px;
-        margin-left: 14px;
+        margin-top: 3px;
+        margin-left: 16px;
         list-style: disc;
       }
 
       ul.bullets li {
         font-size: 9.5pt;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
         text-align: justify;
       }
 
-      /* ─── Projects ───────────────────────────────────────────── */
-      .project-name  { font-weight: bold; font-size: 9.5pt; }
-      .project-desc  { font-size: 9.5pt; }
-      .project-tech  { font-style: italic; font-size: 9pt; }
+      /* ─── Skills (flat bullet list) ──────────────────────────── */
+      ul.skill-list {
+        margin-left: 16px;
+        list-style: disc;
+      }
 
-      /* ─── Print: keep entries together ──────────────────────── */
-      .entry { page-break-inside: avoid; }
+      ul.skill-list li {
+        font-size: 9.5pt;
+        margin-bottom: 2px;
+      }
+
+      /* ─── Certifications (flat bullet list) ──────────────────── */
+      ul.cert-list {
+        margin-left: 16px;
+        list-style: disc;
+      }
+
+      ul.cert-list li {
+        font-size: 9.5pt;
+        margin-bottom: 2px;
+      }
+
+      /* ─── Projects ───────────────────────────────────────────── */
+      .project-name { font-weight: bold; font-size: 9.5pt; }
+      .project-desc { font-size: 9.5pt; }
+      .project-tech { font-style: italic; font-size: 9pt; }
     </style>
   </head>
   <body>
@@ -137,26 +146,21 @@
     <!-- ══════════ HEADER ══════════ -->
     <header id="header">
       <div id="name">{{NAME}}</div>
+      <div id="tagline">{{TAGLINE}}</div>
       <div id="contact">
-        {{PHONE}} &nbsp;&bull;&nbsp; {{EMAIL}} &nbsp;&bull;&nbsp; {{LOCATION}}{{LINKS_ROW}}
+        {{LOCATION}} &nbsp;|&nbsp; {{EMAIL}} &nbsp;|&nbsp; {{PHONE}}{{LINKS_ROW}}
       </div>
     </header>
 
-    <!-- ══════════ SUMMARY ══════════ -->
+    <!-- ══════════ PROFESSIONAL SUMMARY ══════════ -->
     <section class="section" id="summary">
       <div class="section-title">Professional Summary</div>
       <p>{{SUMMARY}}</p>
     </section>
 
-    <!-- ══════════ SKILLS ══════════ -->
-    <section class="section" id="skills">
-      <div class="section-title">Skills</div>
-      {{SKILLS_ROWS}}
-    </section>
-
-    <!-- ══════════ EXPERIENCE ══════════ -->
+    <!-- ══════════ WORK EXPERIENCE ══════════ -->
     <section class="section" id="experience">
-      <div class="section-title">Experience</div>
+      <div class="section-title">Work Experience</div>
       {{EXPERIENCE_ENTRIES}}
     </section>
 
@@ -164,6 +168,14 @@
     <section class="section" id="education">
       <div class="section-title">Education</div>
       {{EDUCATION_ENTRIES}}
+    </section>
+
+    <!-- ══════════ SKILLS ══════════ -->
+    <section class="section" id="skills">
+      <div class="section-title">Skills</div>
+      <ul class="skill-list">
+        {{SKILLS_ITEMS}}
+      </ul>
     </section>
 
     <!-- ══════════ CERTIFICATIONS (conditional) ══════════ -->

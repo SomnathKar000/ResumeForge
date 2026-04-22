@@ -15,32 +15,41 @@ const esc = (str: string = ""): string =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-/** Renders a single optional link item separated by a bullet. */
+/** Renders a single optional link item separated by a pipe. */
 const optionalLink = (value: string | undefined, href: string): string =>
-  value ? ` &nbsp;&bull;&nbsp; <a href="${href}">${esc(value)}</a>` : "";
+  value ? ` &nbsp;|&nbsp; <a href="${href}">${esc(value)}</a>` : "";
 
-/** Builds the combined optional-links string (LinkedIn · GitHub · Portfolio). */
-const buildLinksRow = (data: ResumeData): string => {
-  const parts = [
+/** Builds the combined optional-links string (LinkedIn | GitHub | Portfolio). */
+const buildLinksRow = (data: ResumeData): string =>
+  [
     data.linkedin  ? optionalLink(data.linkedin,  data.linkedin)  : "",
     data.github    ? optionalLink(data.github,     data.github)    : "",
     data.portfolio ? optionalLink(data.portfolio,  data.portfolio) : "",
-  ].filter(Boolean);
-  return parts.join("");
-};
+  ]
+    .filter(Boolean)
+    .join("");
+
+/**
+ * Builds the bold tagline line shown under the name.
+ * Uses the top skill category names joined with " | ", e.g.:
+ * "Digital Marketing | SEO | Content Marketing"
+ */
+const buildTagline = (skills: ResumeData["skills"]): string =>
+  skills
+    .slice(0, 4)              // cap at 4 categories to keep it on one line
+    .map((s) => esc(s.category))
+    .join(" | ");
 
 // ─── section builders ────────────────────────────────────────────────────────
 
-const buildSkillsRows = (skills: ResumeData["skills"]): string =>
+/**
+ * Flat bullet list of all skill items grouped by category row.
+ * Each <li> is one category's items joined by commas — matching the reference design.
+ */
+const buildSkillItems = (skills: ResumeData["skills"]): string =>
   skills
-    .map(
-      ({ category, items }) => `
-    <div class="skill-row">
-      <span class="skill-category">${esc(category)}:</span>
-      <span class="skill-items">${items.map(esc).join(", ")}</span>
-    </div>`
-    )
-    .join("\n");
+    .map(({ items }) => `<li>${items.map(esc).join(", ")}</li>`)
+    .join("\n        ");
 
 const buildExperienceEntries = (
   experience: ResumeData["experience"]
@@ -52,7 +61,7 @@ const buildExperienceEntries = (
       <div class="entry-header">
         <div class="entry-left">
           <div class="entry-title">${esc(title)}</div>
-          <div class="entry-subtitle">${esc(company)} &mdash; ${esc(location)}</div>
+          <div class="entry-subtitle">${esc(company)}, ${esc(location)}</div>
         </div>
         <div class="entry-date">${esc(startDate)} &ndash; ${esc(endDate)}</div>
       </div>
@@ -71,62 +80,48 @@ const buildEducationEntries = (education: ResumeData["education"]): string =>
       <div class="entry-header">
         <div class="entry-left">
           <div class="entry-title">${esc(degree)}</div>
-          <div class="entry-subtitle">${esc(institution)} &mdash; ${esc(location)}</div>
+          <div class="entry-subtitle">${esc(institution)}, ${esc(location)}</div>
           ${gpa ? `<div class="entry-subtitle">GPA: ${esc(gpa)}</div>` : ""}
         </div>
-        <div class="entry-date">${esc(graduationDate)}</div>
+        <div class="entry-date">Graduated: ${esc(graduationDate)}</div>
       </div>
     </div>`
     )
     .join("\n");
 
+/**
+ * Certifications rendered as a flat bullet list (name only per item).
+ */
 const buildCertificationsSection = (
   certifications: ResumeData["certifications"]
 ): string => {
   if (!certifications?.length) return "";
 
-  const entries = certifications
-    .map(
-      ({ name, issuer, date }) => `
-    <div class="entry">
-      <div class="entry-header">
-        <div class="entry-left">
-          <div class="entry-title">${esc(name)}</div>
-          <div class="entry-subtitle">${esc(issuer)}</div>
-        </div>
-        <div class="entry-date">${esc(date)}</div>
-      </div>
-    </div>`
-    )
-    .join("\n");
+  const items = certifications
+    .map(({ name }) => `<li>${esc(name)}</li>`)
+    .join("\n        ");
 
   return `
     <section class="section" id="certifications">
       <div class="section-title">Certifications</div>
-      ${entries}
+      <ul class="cert-list">
+        ${items}
+      </ul>
     </section>`;
 };
 
-const buildProjectsSection = (
-  projects: ResumeData["projects"]
-): string => {
+const buildProjectsSection = (projects: ResumeData["projects"]): string => {
   if (!projects?.length) return "";
 
   const entries = projects
     .map(
       ({ name, description, technologies, url }) => `
     <div class="entry">
-      <div class="entry-header">
-        <div class="entry-left">
-          <div class="project-name">${
-            url
-              ? `<a href="${esc(url)}">${esc(name)}</a>`
-              : esc(name)
-          }</div>
-          <div>${esc(description)}</div>
-          <div class="project-tech">${technologies.map(esc).join(", ")}</div>
-        </div>
-      </div>
+      <div class="project-name">${
+        url ? `<a href="${esc(url)}">${esc(name)}</a>` : esc(name)
+      }</div>
+      <div class="project-desc">${esc(description)}</div>
+      <div class="project-tech">${technologies.map(esc).join(", ")}</div>
     </div>`
     )
     .join("\n");
@@ -151,31 +146,20 @@ const buildResumeHtml = (resumeData: ResumeData): string => {
   const template = fs.readFileSync(TEMPLATE_PATH, "utf-8");
 
   const html = template
-    // ── Contact header ──────────────────────────────────────────
+    // ── Header ──────────────────────────────────────────────────
     .replace(/\{\{NAME\}\}/g, esc(resumeData.name))
-    .replace("{{EMAIL}}",    esc(resumeData.email))
-    .replace("{{PHONE}}",    esc(resumeData.phone))
-    .replace("{{LOCATION}}", esc(resumeData.location))
+    .replace("{{TAGLINE}}",   buildTagline(resumeData.skills))
+    .replace("{{EMAIL}}",     esc(resumeData.email))
+    .replace("{{PHONE}}",     esc(resumeData.phone))
+    .replace("{{LOCATION}}",  esc(resumeData.location))
     .replace("{{LINKS_ROW}}", buildLinksRow(resumeData))
     // ── Sections ─────────────────────────────────────────────────
-    .replace("{{SUMMARY}}", esc(resumeData.summary))
-    .replace("{{SKILLS_ROWS}}", buildSkillsRows(resumeData.skills))
-    .replace(
-      "{{EXPERIENCE_ENTRIES}}",
-      buildExperienceEntries(resumeData.experience)
-    )
-    .replace(
-      "{{EDUCATION_ENTRIES}}",
-      buildEducationEntries(resumeData.education)
-    )
-    .replace(
-      "{{CERTIFICATIONS_SECTION}}",
-      buildCertificationsSection(resumeData.certifications)
-    )
-    .replace(
-      "{{PROJECTS_SECTION}}",
-      buildProjectsSection(resumeData.projects)
-    );
+    .replace("{{SUMMARY}}",            esc(resumeData.summary))
+    .replace("{{EXPERIENCE_ENTRIES}}", buildExperienceEntries(resumeData.experience))
+    .replace("{{EDUCATION_ENTRIES}}",  buildEducationEntries(resumeData.education))
+    .replace("{{SKILLS_ITEMS}}",       buildSkillItems(resumeData.skills))
+    .replace("{{CERTIFICATIONS_SECTION}}", buildCertificationsSection(resumeData.certifications))
+    .replace("{{PROJECTS_SECTION}}",   buildProjectsSection(resumeData.projects));
 
   return html;
 };
