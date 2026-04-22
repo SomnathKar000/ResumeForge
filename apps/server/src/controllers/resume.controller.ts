@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AppError from "../utils/AppError";
 import { parseResumeFile } from "../services/parse.service";
 import { tailorResume } from "../services/ai.service";
+import { generateResumePDF } from "../services/pdf.service";
 
 const generateResume = async (req: Request, res: Response) => {
   const file = req.file;
@@ -16,19 +17,15 @@ const generateResume = async (req: Request, res: Response) => {
   }
 
   const rawText = await parseResumeFile(file.buffer, file.mimetype);
-
   const resumeData = await tailorResume(rawText, jobDescription);
+  const pdfBuffer = await generateResumePDF(resumeData);
 
-  console.log("resumeData: ", resumeData);
+  const filename = `resume-${Date.now()}.pdf`;
 
-  res.json({
-    success: true,
-    message: "File uploaded successfully",
-    data: {
-      jobDescription,
-      file,
-    },
-  });
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.setHeader("Content-Length", pdfBuffer.length);
+  res.send(pdfBuffer);
 };
 
 export { generateResume };
