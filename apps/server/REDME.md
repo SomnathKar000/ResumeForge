@@ -41,7 +41,7 @@ server/
 │   │
 │   ├── services/
 │   │   ├── parse.service.ts      # Extract text from PDF / DOCX
-│   │   ├── claude.service.ts     # Call Claude API, get resume JSON
+│   │   ├── ai.service.ts         # Call AI API, get resume JSON
 │   │   ├── template.service.ts   # Inject JSON data into HTML template
 │   │   └── pdf.service.ts        # Convert HTML to PDF using Puppeteer
 │   │
