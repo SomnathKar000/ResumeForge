@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AppError from "../utils/AppError";
 import { parseResumeFile } from "../services/parse.service";
+import { tailorResume } from "../services/ai.service";
 
 const generateResume = async (req: Request, res: Response) => {
   const file = req.file;
@@ -16,7 +17,9 @@ const generateResume = async (req: Request, res: Response) => {
 
   const rawText = await parseResumeFile(file.buffer, file.mimetype);
 
-  console.log("rawText: ", rawText);
+  const resumeData = await tailorResume(rawText, jobDescription);
+
+  console.log("resumeData: ", resumeData);
 
   res.json({
     success: true,
