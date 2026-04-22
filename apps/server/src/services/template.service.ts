@@ -15,9 +15,19 @@ const esc = (str: string = ""): string =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-/** Conditionally render a contact link row (returns empty string if value is falsy). */
-const contactLink = (value: string | undefined, href: string): string =>
-  value ? ` &nbsp;|&nbsp; <a href="${esc(href)}">${esc(value)}</a>` : "";
+/** Renders a single optional link item separated by a bullet. */
+const optionalLink = (value: string | undefined, href: string): string =>
+  value ? ` &nbsp;&bull;&nbsp; <a href="${href}">${esc(value)}</a>` : "";
+
+/** Builds the combined optional-links string (LinkedIn · GitHub · Portfolio). */
+const buildLinksRow = (data: ResumeData): string => {
+  const parts = [
+    data.linkedin  ? optionalLink(data.linkedin,  data.linkedin)  : "",
+    data.github    ? optionalLink(data.github,     data.github)    : "",
+    data.portfolio ? optionalLink(data.portfolio,  data.portfolio) : "",
+  ].filter(Boolean);
+  return parts.join("");
+};
 
 // ─── section builders ────────────────────────────────────────────────────────
 
@@ -143,27 +153,10 @@ const buildResumeHtml = (resumeData: ResumeData): string => {
   const html = template
     // ── Contact header ──────────────────────────────────────────
     .replace(/\{\{NAME\}\}/g, esc(resumeData.name))
-    .replace("{{EMAIL}}", esc(resumeData.email))
-    .replace("{{PHONE}}", esc(resumeData.phone))
+    .replace("{{EMAIL}}",    esc(resumeData.email))
+    .replace("{{PHONE}}",    esc(resumeData.phone))
     .replace("{{LOCATION}}", esc(resumeData.location))
-    .replace(
-      "{{LINKEDIN_ROW}}",
-      resumeData.linkedin
-        ? contactLink(resumeData.linkedin, resumeData.linkedin)
-        : ""
-    )
-    .replace(
-      "{{GITHUB_ROW}}",
-      resumeData.github
-        ? contactLink(resumeData.github, resumeData.github)
-        : ""
-    )
-    .replace(
-      "{{PORTFOLIO_ROW}}",
-      resumeData.portfolio
-        ? contactLink(resumeData.portfolio, resumeData.portfolio)
-        : ""
-    )
+    .replace("{{LINKS_ROW}}", buildLinksRow(resumeData))
     // ── Sections ─────────────────────────────────────────────────
     .replace("{{SUMMARY}}", esc(resumeData.summary))
     .replace("{{SKILLS_ROWS}}", buildSkillsRows(resumeData.skills))

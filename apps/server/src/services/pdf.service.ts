@@ -33,14 +33,13 @@ const generateResumePDF = async (resumeData: ResumeData): Promise<Buffer> => {
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
-      format: "Letter",  // 8.5 × 11 in — standard US resume paper
+      format: "Letter",    // 8.5 × 11 in — standard US resume paper
       printBackground: true,
-      margin: {
-        top: "0.5in",
-        bottom: "0.5in",
-        left: "0.65in",
-        right: "0.65in",
-      },
+      // Margins are handled by @page CSS in the template
+      margin: { top: "0", bottom: "0", left: "0", right: "0" },
+      // scale < 1 shrinks content so everything fits on one page
+      scale: 0.92,
+      pageRanges: "1",     // hard-limit to page 1
     });
 
     return Buffer.from(pdfBuffer);
