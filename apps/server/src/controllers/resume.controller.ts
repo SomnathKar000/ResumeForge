@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AppError from "../utils/AppError";
+import { parseResumeFile } from "../services/parse.service";
 
 const generateResume = async (req: Request, res: Response) => {
   const file = req.file;
@@ -13,11 +14,9 @@ const generateResume = async (req: Request, res: Response) => {
     throw new AppError("Please provide a job description", 400);
   }
 
-  console.log("jobDescription: ", jobDescription);
-  console.log("Buffer ", file.buffer);
-  console.log("mimetype: ", file.mimetype);
-  console.log("size: ", file.size);
-  console.log("originalname: ", file.originalname);
+  const rawText = await parseResumeFile(file.buffer, file.mimetype);
+
+  console.log("rawText: ", rawText);
 
   res.json({
     success: true,
