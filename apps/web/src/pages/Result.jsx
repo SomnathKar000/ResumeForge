@@ -13,7 +13,7 @@ export default function Result() {
       className="font-body text-on-surface min-h-screen flex flex-col"
       style={{ backgroundColor: "#000000" }}
     >
-      <Navbar variant="minimal" />
+      <Navbar />
 
       <main className="min-h-screen pt-24 pb-12 px-6 flex flex-col items-center justify-center">
         {/* Success Content Area */}
