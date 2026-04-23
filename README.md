@@ -19,7 +19,7 @@ Upload Resume (PDF or DOCX)
         ↓
    Extract resume text
         ↓
-  Claude AI analyzes both
+  Gemini AI analyzes both
         ↓
   Rewrites resume to match the job
         ↓
@@ -36,7 +36,7 @@ Upload Resume (PDF or DOCX)
 | Backend        | Node.js + Express                |
 | File Upload    | Multer                           |
 | Resume Parsing | pdf-parse (PDF) + mammoth (DOCX) |
-| AI             | Anthropic Claude API             |
+| AI             | Google Gemini API                |
 | PDF Export     | Puppeteer                        |
 
 ---
@@ -79,7 +79,7 @@ Create a `.env` file in `apps/server/`:
 
 ```env
 PORT=5000
-ANTHROPIC_API_KEY=your_api_key_here
+GEMINI_API_KEY=your_api_key_here
 ```
 
 Create a `.env` file in `apps/web/`:
@@ -129,12 +129,6 @@ cd apps/web && npm run dev
 # Backend only
 cd apps/server && npm run dev
 ```
-
----
-
-## License
-
-MIT — free to use and modify.
 
 ---
 
