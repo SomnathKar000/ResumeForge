@@ -48,9 +48,7 @@ export default function ResumeCard({
           </h3>
           <Badge variant={variant}>{label}</Badge>
         </div>
-        <p className="text-xs text-on-surface-variant">
-          Updated {updatedAt}
-        </p>
+        <p className="text-xs text-on-surface-variant">Updated {updatedAt}</p>
       </div>
     </div>
   );
