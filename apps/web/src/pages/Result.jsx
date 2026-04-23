@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { Link, useLocation } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import useResumeGen from "../hooks/useResumeGen";
 
 export default function Result() {
+  const { state } = useLocation();
+  const { downloadPDF } = useResumeGen();
+  const blob = state?.blob ?? null;
+
   return (
-    <div className="font-body text-on-surface min-h-screen flex flex-col" style={{ backgroundColor: '#000000' }}>
+    <div
+      className="font-body text-on-surface min-h-screen flex flex-col"
+      style={{ backgroundColor: "#000000" }}
+    >
       <Navbar variant="minimal" />
 
       <main className="min-h-screen pt-24 pb-12 px-6 flex flex-col items-center justify-center">
@@ -64,7 +72,11 @@ export default function Result() {
           {/* Actions Section */}
           <div className="flex flex-col items-center gap-6">
             {/* Primary Download CTA */}
-            <button className="w-full max-w-sm py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3">
+            <button
+              onClick={() => blob && downloadPDF(blob)}
+              disabled={!blob}
+              className="w-full max-w-sm py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
               <span
                 className="material-symbols-outlined"
                 style={{ fontVariationSettings: "'FILL' 1" }}
@@ -82,16 +94,6 @@ export default function Result() {
               >
                 Generate another
               </Link>
-              <div className="flex items-center gap-8 mt-4 pt-8 border-t border-outline-variant/10 w-full justify-center">
-                <button className="flex items-center gap-2 text-on-surface-variant text-xs font-semibold hover:text-primary transition-colors">
-                  <span className="material-symbols-outlined text-sm">edit</span>
-                  EDIT DETAILS
-                </button>
-                <button className="flex items-center gap-2 text-on-surface-variant text-xs font-semibold hover:text-primary transition-colors">
-                  <span className="material-symbols-outlined text-sm">share</span>
-                  SHARE LINK
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -99,14 +101,18 @@ export default function Result() {
         {/* Feedback Section (Bento Grid Style) */}
         <div className="max-w-2xl w-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
           <div className="bg-[#111111] p-6 rounded-2xl border border-outline-variant/10">
-            <span className="material-symbols-outlined text-primary mb-3 block">auto_awesome</span>
+            <span className="material-symbols-outlined text-primary mb-3 block">
+              auto_awesome
+            </span>
             <h3 className="text-white font-bold mb-1">AI Analysis</h3>
             <p className="text-[#a0a0a0] text-sm">
               Keywords match 92% of the job description requirements.
             </p>
           </div>
           <div className="bg-[#111111] p-6 rounded-2xl border border-outline-variant/10">
-            <span className="material-symbols-outlined text-secondary mb-3 block">tips_and_updates</span>
+            <span className="material-symbols-outlined text-secondary mb-3 block">
+              tips_and_updates
+            </span>
             <h3 className="text-white font-bold mb-1">Next Steps</h3>
             <p className="text-[#a0a0a0] text-sm">
               We recommend tailoring your cover letter for maximum impact.

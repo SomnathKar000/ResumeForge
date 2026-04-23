@@ -10,16 +10,12 @@ async function generateResume(file, jobDescription) {
   formData.append("jobDescription", jobDescription);
 
   try {
-    const response = await axios.post(
-      `${API_PREFIX}/generate-resume`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        responseType: "blob",
+    const response = await axios.post(`${API_PREFIX}/generate`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-    );
+      responseType: "blob",
+    });
     return response.data;
   } catch (error) {
     console.error("Error generating resume:", error);

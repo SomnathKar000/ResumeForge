@@ -1,26 +1,43 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
 
 export default function Home() {
-  const { handleGenerate } = useResumeGen();
+  const navigate = useNavigate();
+  const { handleGenerate, loading, error } = useResumeGen();
 
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    setFile(e.target.files[0] ?? null);
+    setValidationError("");
   };
 
   const handleJobDescriptionChange = (e) => {
     setJobDescription(e.target.value);
+    setValidationError("");
   };
 
-  const handleGenerateClick = () => {
-    // handleGenerate(file, jobDescription);
-    console.log(file, jobDescription);
+  const handleGenerateClick = async () => {
+    if (!file) {
+      setValidationError("Please upload a PDF or DOCX resume.");
+      return;
+    }
+    if (!jobDescription.trim()) {
+      setValidationError("Please paste a job description.");
+      return;
+    }
+
+    setValidationError("");
+    const blob = await handleGenerate(file, jobDescription);
+
+    if (blob) {
+      navigate("/result", { state: { blob } });
+    }
   };
 
   return (
@@ -63,11 +80,16 @@ export default function Home() {
               <p className="font-label text-xs uppercase tracking-widest text-on-surface-variant">
                 Max size 5MB
               </p>
+              {/* Show selected file name */}
+              {file && (
+                <p className="mt-3 font-label text-xs text-primary truncate max-w-[200px]">
+                  {file.name}
+                </p>
+              )}
               <input
                 accept=".pdf,.docx"
                 className="absolute inset-0 opacity-0 cursor-pointer"
                 type="file"
-                value={file}
                 onChange={handleFileChange}
               />
             </div>
@@ -97,21 +119,39 @@ export default function Home() {
           </section>
         </div>
 
+        {/* Validation / API error */}
+        {(validationError || error) && (
+          <p className="text-center text-red-400 font-label text-sm -mt-4 mb-2">
+            {validationError || error}
+          </p>
+        )}
+
         {/* Action Button */}
         <div className="flex justify-center mb-24">
-          <Link
-            to="/result"
-            className="w-full md:w-auto min-w-[320px] bg-on-primary-container text-surface-container-lowest font-headline text-lg font-bold py-5 px-12 rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-primary/10"
+          <button
             onClick={handleGenerateClick}
+            disabled={loading}
+            className="w-full md:w-auto min-w-[320px] bg-on-primary-container text-surface-container-lowest font-headline text-lg font-bold py-5 px-12 rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-primary/10 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
           >
-            Generate Resume
-            <span
-              className="material-symbols-outlined"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              bolt
-            </span>
-          </Link>
+            {loading ? (
+              <>
+                <span className="material-symbols-outlined animate-spin text-xl">
+                  progress_activity
+                </span>
+                Generating...
+              </>
+            ) : (
+              <>
+                Generate Resume
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  bolt
+                </span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Feature Grid (Editorial Style) */}
