@@ -13,13 +13,10 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex gap-8">
-          <Link className="font-body text-xs tracking-wide uppercase text-[#c7c4d8] hover:text-[#c2c1ff] transition-colors" to="/privacy">
-            Privacy Policy
-          </Link>
-          <Link className="font-body text-xs tracking-wide uppercase text-[#c7c4d8] hover:text-[#c2c1ff] transition-colors" to="/terms">
-            Terms of Service
-          </Link>
-          <Link className="font-body text-xs tracking-wide uppercase text-[#c7c4d8] hover:text-[#c2c1ff] transition-colors" to="/contact">
+          <Link
+            className="font-body text-xs tracking-wide uppercase text-[#c7c4d8] hover:text-[#c2c1ff] transition-colors"
+            to="/contact"
+          >
             Contact
           </Link>
         </div>
@@ -27,4 +24,3 @@ export default function Footer() {
     </footer>
   );
 }
-
