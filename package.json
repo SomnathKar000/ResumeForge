@@ -8,10 +8,13 @@
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=apps/web\" \"npm run dev --workspace=apps/server\"",
-    "build": "concurrently \"npm run build --workspace=apps/web\" \"npm run build --workspace=apps/server\"",
-    "start": "concurrently \"npm run start --workspace=apps/web\" \"npm run start --workspace=apps/server\""
+    "build": "npm run build --workspace=apps/web && npm run build --workspace=apps/server",
+    "start": "npm start --workspace=apps/server"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
