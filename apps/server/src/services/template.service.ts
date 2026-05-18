@@ -5,6 +5,9 @@ import { ResumeData } from "../types";
 // Resolve template path relative to this file (works in both ts-node and compiled JS)
 const TEMPLATE_PATH = path.join(__dirname, "../templates/resume.template.html");
 
+// Cache the template in memory at module load — avoids a disk read on every request
+const TEMPLATE_CACHE: string = fs.readFileSync(TEMPLATE_PATH, "utf-8");
+
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 /** Escape characters that could break HTML or introduce XSS. */
@@ -143,7 +146,7 @@ const buildProjectsSection = (projects: ResumeData["projects"]): string => {
  * @returns Populated HTML string ready to be passed to `pdf.service`
  */
 const buildResumeHtml = (resumeData: ResumeData): string => {
-  const template = fs.readFileSync(TEMPLATE_PATH, "utf-8");
+  const template = TEMPLATE_CACHE;
 
   const html = template
     // ── Header ──────────────────────────────────────────────────

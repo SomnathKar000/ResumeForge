@@ -5,6 +5,9 @@
     "nixpacksConfigPath": "nixpacks.toml"
   },
   "deploy": {
-    "startCommand": "npm start --workspace=apps/server"
+    "startCommand": "npm start --workspace=apps/server",
+    "environmentVariables": {
+      "NODE_OPTIONS": "--max-old-space-size=384"
+    }
   }
 }

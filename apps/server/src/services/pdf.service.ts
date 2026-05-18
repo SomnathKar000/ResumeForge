@@ -1,55 +1,95 @@
-import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
+import pLimit from "p-limit";
 import { ResumeData } from "../types";
 import { buildResumeHtml } from "./template.service";
 import AppError from "../utils/AppError";
 
+// ---------------------------------------------------------------------------
+// Concurrency limiter — only 1 Chromium process at a time on 0.5 GB RAM.
+// ---------------------------------------------------------------------------
+const limit = pLimit(1);
+
+// ---------------------------------------------------------------------------
+// Resolve the Chromium executable path.
+//
+// Priority:
+//   1. CHROMIUM_EXECUTABLE_PATH env var  → used in local dev (macOS/Windows)
+//      e.g. /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+//   2. @sparticuz/chromium               → used in production (Railway/Linux)
+// ---------------------------------------------------------------------------
+const getExecutablePath = async (): Promise<string> => {
+  if (process.env.CHROMIUM_EXECUTABLE_PATH) {
+    return process.env.CHROMIUM_EXECUTABLE_PATH;
+  }
+  return chromium.executablePath();
+};
+
+// ---------------------------------------------------------------------------
+// Chromium launch args tuned for a memory-constrained container.
+// When running with a local Chrome (dev), chromium.args is still fine to spread.
+// ---------------------------------------------------------------------------
+const EXTRA_ARGS = [
+  "--no-sandbox",
+  "--disable-setuid-sandbox",
+  "--disable-dev-shm-usage",
+  "--disable-gpu",
+  "--no-zygote",
+  "--single-process",
+  "--js-flags=--max-old-space-size=64",
+];
+
 /**
  * Renders a ResumeData object to a PDF buffer via Puppeteer.
  *
- * Pipeline:
- *   ResumeData → buildResumeHtml() → HTML string → Puppeteer → PDF Buffer
+ * Uses @sparticuz/chromium in production (Railway) and the system Chrome
+ * (via CHROMIUM_EXECUTABLE_PATH env var) in local development.
+ *
+ * Only 1 instance runs at a time (p-limit) to stay within 0.5 GB RAM.
  *
  * @param resumeData - Structured resume data from ai.service
  * @returns PDF as a Node.js Buffer
  */
-const generateResumePDF = async (resumeData: ResumeData): Promise<Buffer> => {
-  const html = buildResumeHtml(resumeData);
+const generateResumePDF = (resumeData: ResumeData): Promise<Buffer> =>
+  limit(async () => {
+    const html = buildResumeHtml(resumeData);
+    const executablePath = await getExecutablePath();
 
-  let browser;
+    // Use slimmed args only in production; local Chrome ignores unknown flags
+    // but we keep them harmless for cross-platform consistency.
+    const args = process.env.CHROMIUM_EXECUTABLE_PATH
+      ? ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+      : [...chromium.args, ...EXTRA_ARGS];
 
-  try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage", // avoids crashes in Docker / CI
-      ],
-    });
+    let browser;
 
-    const page = await browser.newPage();
+    try {
+      browser = await puppeteer.launch({
+        args,
+        executablePath,
+        headless: true,
+      });
 
-    // Load the HTML directly — no network round-trip needed
-    await page.setContent(html, { waitUntil: "networkidle0" });
+      const page = await browser.newPage();
 
-    const pdfBuffer = await page.pdf({
-      format: "Letter",    // 8.5 × 11 in — standard US resume paper
-      printBackground: true,
-      // Margins are handled by @page CSS in the template
-      margin: { top: "0", bottom: "0", left: "0", right: "0" },
-      // scale < 1 shrinks content so everything fits on one page
-      scale: 0.92,
-      pageRanges: "1",     // hard-limit to page 1
-    });
+      // Load HTML directly — no network round-trip needed
+      await page.setContent(html, { waitUntil: "networkidle0" });
 
-    return Buffer.from(pdfBuffer);
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new AppError(`PDF generation failed: ${message}`, 500);
-  } finally {
-    // Always close the browser, even on error
-    if (browser) await browser.close();
-  }
-};
+      const pdfBuffer = await page.pdf({
+        format: "Letter",
+        printBackground: true,
+        margin: { top: "0", bottom: "0", left: "0", right: "0" },
+        scale: 0.92,
+        pageRanges: "1",
+      });
+
+      return Buffer.from(pdfBuffer);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      throw new AppError(`PDF generation failed: ${message}`, 500);
+    } finally {
+      if (browser) await browser.close();
+    }
+  });
 
 export { generateResumePDF };
