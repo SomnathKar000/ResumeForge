@@ -13,8 +13,8 @@ app.use(
     origin: process.env.CLIENT_URL || "http://localhost:5173",
   }),
 );
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "512kb" }));
+app.use(express.urlencoded({ extended: true, limit: "512kb" }));
 
 const PORT = process.env.PORT || 4000;
 const API_PREFIX = process.env.API_PREFIX || "/api/v1";
