@@ -21,7 +21,7 @@ RUN npm run build
 # Runtime stage
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /app/apps/server  # ← CHANGE THIS LINE
 
 # Install Chromium dependencies
 RUN apk add --no-cache chromium
@@ -29,6 +29,7 @@ RUN apk add --no-cache chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV NODE_ENV=production
+ENV PORT=8080
 
 # Copy built files
 COPY --from=builder /app/apps/server/node_modules ./node_modules
