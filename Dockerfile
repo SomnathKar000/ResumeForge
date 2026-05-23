@@ -3,10 +3,19 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy only server files
+COPY apps/server/package*.json ./apps/server/
+
+WORKDIR /app/apps/server
+
+# Install dependencies
 RUN npm install
 
-COPY . .
+# Copy server source
+COPY apps/server/src ./src
+COPY apps/server/tsconfig.json ./
+
+# Build
 RUN npm run build
 
 # Runtime stage
@@ -14,20 +23,18 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install Chromium dependencies for Puppeteer
-RUN apk add --no-cache \
-  chromium \
-  noto-sans
+# Install Chromium dependencies
+RUN apk add --no-cache chromium noto-sans
 
-# Puppeteer will use the system Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV NODE_ENV=production
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps ./apps
-COPY package*.json ./
+# Copy built files
+COPY --from=builder /app/apps/server/node_modules ./node_modules
+COPY --from=builder /app/apps/server/dist ./dist
+COPY apps/server/package*.json ./
 
-# Cloud Run requires port 8080
 EXPOSE 8080
 
-CMD ["npm", "start", "--workspace=apps/server"]
+CMD ["npm", "start"]
