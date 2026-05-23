@@ -25,6 +25,10 @@ app.use(`${API_PREFIX}/resume/generate`, generateLimiter);
 
 app.use(API_PREFIX, resumeRoutes);
 
+app.get("/health", (_, res) => {
+  res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 app.use(errorHandler);
 app.use(notFoundHandler);
 
