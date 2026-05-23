@@ -17,7 +17,7 @@ app.use(
 app.use(express.json({ limit: "512kb" }));
 app.use(express.urlencoded({ extended: true, limit: "512kb" }));
 
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 const API_PREFIX = process.env.API_PREFIX || "/api/v1";
 
 app.use(generalLimiter);
