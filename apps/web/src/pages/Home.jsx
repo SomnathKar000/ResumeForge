@@ -73,7 +73,9 @@ export default function Home() {
                 description
               </span>
             </div>
-            <div className={`relative flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-2xl py-16 px-6 bg-surface-container-lowest/50 transition-colors ${loading ? 'opacity-40 pointer-events-none' : 'group-hover:border-primary/40'}`}>
+            <div
+              className={`relative flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-2xl py-16 px-6 bg-surface-container-lowest/50 transition-colors ${loading ? "opacity-40 cursor-not-allowed" : "group-hover:border-primary/40"}`}
+            >
               <div className="w-16 h-16 bg-surface-container flex items-center justify-center rounded-full mb-4 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined text-3xl text-primary">
                   upload
@@ -93,7 +95,7 @@ export default function Home() {
               )}
               <input
                 accept=".pdf,.docx"
-                className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                className="absolute inset-0 opacity-0 cursor-pointer disabled:pointer-events-none"
                 type="file"
                 onChange={handleFileChange}
                 disabled={loading}
