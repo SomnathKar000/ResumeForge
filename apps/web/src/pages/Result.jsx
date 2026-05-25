@@ -89,7 +89,7 @@ export default function Result() {
             <button
               onClick={() => blob && downloadPDF(blob)}
               disabled={!blob}
-              className="w-full max-w-sm py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full max-w-sm cursor-pointer py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span
                 className="material-symbols-outlined"
