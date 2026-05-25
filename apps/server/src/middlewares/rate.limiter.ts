@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import type { Request, Response } from "express";
 
 const createLimiter = ({
@@ -19,7 +19,9 @@ const createLimiter = ({
 
     skip: (req) => req.path === "/health",
 
-    keyGenerator: (req: Request) => req.ip || "unknown",
+    keyGenerator: (req: Request) => {
+      return ipKeyGenerator(req.ip || "unknown");
+    },
 
     handler: (_req: Request, res: Response) => {
       res.status(429).json({
