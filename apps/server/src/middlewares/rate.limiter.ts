@@ -1,44 +1,43 @@
 import rateLimit from "express-rate-limit";
-import type { Request } from "express";
+import type { Request, Response } from "express";
 
-/**
- * Safely extract client IP
- */
-const getClientIp = (req: Request): string => {
-  return req.ip || "unknown";
-};
+const createLimiter = ({
+  windowMs,
+  max,
+  message,
+}: {
+  windowMs: number;
+  max: number;
+  message: string;
+}) =>
+  rateLimit({
+    windowMs,
+    max,
 
-/** General limiter — covers all routes */
-export const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+
+    skip: (req) => req.path === "/health",
+
+    keyGenerator: (req: Request) => req.ip || "unknown",
+
+    handler: (_req: Request, res: Response) => {
+      res.status(429).json({
+        success: false,
+        statusCode: 429,
+        message,
+      });
+    },
+  });
+
+export const generalLimiter = createLimiter({
+  windowMs: 15 * 60 * 1000,
   max: 100,
-
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-
-  keyGenerator: (req: Request) => getClientIp(req),
-
-  message: {
-    success: false,
-    message: "Too many requests. Please try again after 15 minutes.",
-    statusCode: 429,
-  },
+  message: "Too many requests. Please try again after 15 minutes.",
 });
 
-/** Strict limiter — for PDF generation */
-export const generateLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
+export const generateLimiter = createLimiter({
+  windowMs: 60 * 60 * 1000,
   max: 10,
-
-  standardHeaders: "draft-8",
-  legacyHeaders: false,
-
-  keyGenerator: (req: Request) => getClientIp(req),
-
-  message: {
-    success: false,
-    message:
-      "Resume generation limit reached (10/hour). Please try again later.",
-    statusCode: 429,
-  },
+  message: "Resume generation limit reached (10/hour). Please try again later.",
 });
