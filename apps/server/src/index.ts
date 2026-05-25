@@ -17,7 +17,7 @@ app.use(
 app.use(express.json({ limit: "512kb" }));
 app.use(express.urlencoded({ extended: true, limit: "512kb" }));
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 const API_PREFIX = process.env.API_PREFIX || "/api/v1";
 
 app.use(generalLimiter);
@@ -25,9 +25,13 @@ app.use(`${API_PREFIX}/resume/generate`, generateLimiter);
 
 app.use(API_PREFIX, resumeRoutes);
 
+app.get("/health", (_, res) => {
+  res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });

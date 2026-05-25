@@ -1,12 +1,26 @@
-import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
 
 export default function Result() {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const { downloadPDF } = useResumeGen();
   const blob = state?.blob ?? null;
+
+  useEffect(() => {
+    if (!blob) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    return () => {
+      // Clear browser history state when user switches / navigates away
+      window.history.replaceState(null, "");
+    };
+  }, [blob, navigate]);
 
   return (
     <div
@@ -75,7 +89,7 @@ export default function Result() {
             <button
               onClick={() => blob && downloadPDF(blob)}
               disabled={!blob}
-              className="w-full max-w-sm py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full max-w-sm cursor-pointer py-5 px-8 bg-white text-black font-bold text-lg rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span
                 className="material-symbols-outlined"

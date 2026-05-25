@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
+import Snackbar from "../components/ui/Snackbar";
 
 export default function Home() {
   const navigate = useNavigate();
   const { handleGenerate, loading, error } = useResumeGen();
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
@@ -33,10 +35,13 @@ export default function Home() {
     }
 
     setValidationError("");
+    setShowSnackbar(false);
     const blob = await handleGenerate(file, jobDescription);
 
     if (blob) {
       navigate("/result", { state: { blob } });
+    } else {
+      setShowSnackbar(true);
     }
   };
 
@@ -68,7 +73,9 @@ export default function Home() {
                 description
               </span>
             </div>
-            <div className="relative flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-2xl py-16 px-6 bg-surface-container-lowest/50 group-hover:border-primary/40 transition-colors">
+            <div
+              className={`relative flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 rounded-2xl py-16 px-6 bg-surface-container-lowest/50 transition-colors ${loading ? "opacity-40 cursor-not-allowed" : "group-hover:border-primary/40"}`}
+            >
               <div className="w-16 h-16 bg-surface-container flex items-center justify-center rounded-full mb-4 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined text-3xl text-primary">
                   upload
@@ -88,9 +95,10 @@ export default function Home() {
               )}
               <input
                 accept=".pdf,.docx"
-                className="absolute inset-0 opacity-0 cursor-pointer"
+                className="absolute inset-0 opacity-0 cursor-pointer disabled:pointer-events-none"
                 type="file"
                 onChange={handleFileChange}
+                disabled={loading}
               />
             </div>
           </section>
@@ -110,19 +118,20 @@ export default function Home() {
                 Paste content below
               </label>
               <textarea
-                className="w-full h-64 bg-surface-container-lowest border-none rounded-2xl p-6 text-on-surface font-body resize-none focus:ring-1 focus:ring-primary/40 focus:bg-surface-container-high transition-all focus:outline-none"
+                className="w-full h-64 bg-surface-container-lowest border-none rounded-2xl p-6 text-on-surface font-body resize-none focus:ring-1 focus:ring-primary/40 focus:bg-surface-container-high transition-all focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
                 placeholder="Paste the full job description, requirements, and responsibilities here..."
                 value={jobDescription}
                 onChange={handleJobDescriptionChange}
+                disabled={loading}
               />
             </div>
           </section>
         </div>
 
-        {/* Validation / API error */}
-        {(validationError || error) && (
+        {/* Validation error */}
+        {validationError && (
           <p className="text-center text-red-400 font-label text-sm -mt-4 mb-2">
-            {validationError || error}
+            {validationError}
           </p>
         )}
 
@@ -244,6 +253,12 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <Snackbar
+        isOpen={showSnackbar}
+        message={error}
+        onClose={() => setShowSnackbar(false)}
+      />
     </>
   );
 }
