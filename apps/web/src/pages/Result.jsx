@@ -1,12 +1,26 @@
-import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
 
 export default function Result() {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const { downloadPDF } = useResumeGen();
   const blob = state?.blob ?? null;
+
+  useEffect(() => {
+    if (!blob) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    return () => {
+      // Clear browser history state when user switches / navigates away
+      window.history.replaceState(null, "");
+    };
+  }, [blob, navigate]);
 
   return (
     <div
