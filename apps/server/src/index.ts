@@ -17,7 +17,7 @@ app.use(
 app.use(express.json({ limit: "512kb" }));
 app.use(express.urlencoded({ extended: true, limit: "512kb" }));
 
-const PORT = 8080;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 const API_PREFIX = process.env.API_PREFIX || "/api/v1";
 
 app.use(generalLimiter);
@@ -32,6 +32,6 @@ app.get("/health", (_, res) => {
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -19,13 +19,14 @@ COPY apps/server/tsconfig.json ./
 RUN npm run build
 
 # Runtime stage
-FROM node:18-alpine
+FROM node:22-alpine
 
-WORKDIR /app/apps/server  # ← CHANGE THIS LINE
+WORKDIR /app/apps/server
 
 # Install Chromium dependencies
 RUN apk add --no-cache chromium
 
+ENV CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 ENV NODE_ENV=production
