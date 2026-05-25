@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
+import Snackbar from "../components/ui/Snackbar";
 
 export default function Home() {
   const navigate = useNavigate();
   const { handleGenerate, loading, error } = useResumeGen();
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
@@ -33,10 +35,13 @@ export default function Home() {
     }
 
     setValidationError("");
+    setShowSnackbar(false);
     const blob = await handleGenerate(file, jobDescription);
 
     if (blob) {
       navigate("/result", { state: { blob } });
+    } else {
+      setShowSnackbar(true);
     }
   };
 
@@ -119,10 +124,10 @@ export default function Home() {
           </section>
         </div>
 
-        {/* Validation / API error */}
-        {(validationError || error) && (
+        {/* Validation error */}
+        {validationError && (
           <p className="text-center text-red-400 font-label text-sm -mt-4 mb-2">
-            {validationError || error}
+            {validationError}
           </p>
         )}
 
@@ -244,6 +249,12 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <Snackbar
+        isOpen={showSnackbar}
+        message={error}
+        onClose={() => setShowSnackbar(false)}
+      />
     </>
   );
 }
