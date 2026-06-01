@@ -1,8 +1,25 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import useContact from "../hooks/useContact";
+
+const INITIAL_FORM = { name: "", email: "", subject: "", message: "" };
 
 export default function Contact() {
+  const [form, setForm] = useState(INITIAL_FORM);
+  const { loading, success, error, handleSubmit, reset } = useContact();
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await handleSubmit(form);
+    if (!error) setForm(INITIAL_FORM);
+  };
+
   return (
     <div className="font-body selection:bg-primary selection:text-on-primary">
       <Navbar variant="full" />
@@ -109,60 +126,140 @@ export default function Contact() {
               We reply within 24 hours on weekdays
             </p>
           </div>
+
           <div
             className="bg-[#111111] p-10 rounded-2xl border border-white/5"
             style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}
           >
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Success State */}
+            {success ? (
+              <div className="flex flex-col items-center justify-center py-10 text-center gap-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary text-4xl">
+                    check_circle
+                  </span>
+                </div>
+                <h3 className="font-headline text-2xl font-bold text-white">
+                  Message sent!
+                </h3>
+                <p className="text-on-surface-variant text-sm max-w-sm">
+                  Thanks for reaching out. We'll get back to you within one
+                  business day.
+                </p>
+                <button
+                  onClick={reset}
+                  className="mt-4 text-primary text-sm font-semibold hover:underline"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={onSubmit} noValidate>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      required
+                      value={form.name}
+                      onChange={handleChange}
+                      className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      required
+                      value={form.email}
+                      onChange={handleChange}
+                      className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1">
-                    Name
+                  <label
+                    htmlFor="contact-subject"
+                    className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1"
+                  >
+                    Subject
                   </label>
                   <input
-                    className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
-                    placeholder="John Doe"
+                    id="contact-subject"
+                    name="subject"
                     type="text"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1">
-                    Email
-                  </label>
-                  <input
+                    required
+                    value={form.subject}
+                    onChange={handleChange}
                     className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
-                    placeholder="john@example.com"
-                    type="email"
+                    placeholder="How can we help?"
                   />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1">
-                  Subject
-                </label>
-                <input
-                  className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
-                  placeholder="How can we help?"
-                  type="text"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1">
-                  Message
-                </label>
-                <textarea
-                  className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all resize-none"
-                  placeholder="Your message here..."
-                  rows="5"
-                />
-              </div>
-              <button
-                className="w-full bg-white text-black font-bold py-4 rounded-[10px] hover:bg-on-surface-variant transition-all active:scale-[0.98] duration-200 mt-4 shadow-lg"
-                type="button"
-              >
-                Send Message
-              </button>
-            </form>
+
+                <div className="space-y-2">
+                  <label
+                    htmlFor="contact-message"
+                    className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant ml-1"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    value={form.message}
+                    onChange={handleChange}
+                    className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-[10px] px-4 py-3 text-white placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all resize-none"
+                    placeholder="Your message here..."
+                    rows="5"
+                  />
+                </div>
+
+                {/* Error Banner */}
+                {error && (
+                  <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-[10px] px-4 py-3">
+                    <span className="material-symbols-outlined text-red-400 text-lg">
+                      error
+                    </span>
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-white text-black font-bold py-4 rounded-[10px] hover:bg-on-surface-variant transition-all active:scale-[0.98] duration-200 mt-4 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin text-lg">
+                        progress_activity
+                      </span>
+                      Sending…
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
+                </button>
+              </form>
+            )}
           </div>
         </section>
       </main>
