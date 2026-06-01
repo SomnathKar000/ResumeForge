@@ -1,11 +1,9 @@
+import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import resumeRoutes from "./routes/v1/resume.route";
 import contactRoute from "./routes/v1/contact.route";
-import cors from "cors";
-import dotenv from "dotenv";
 import { errorHandler, notFoundHandler } from "./middlewares/error.handler";
-
-dotenv.config();
 
 const app = express();
 
