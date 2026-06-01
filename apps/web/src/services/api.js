@@ -9,18 +9,21 @@ async function generateResume(file, jobDescription) {
   formData.append("resume", file);
   formData.append("jobDescription", jobDescription);
 
-  try {
-    const response = await axios.post(`${API_PREFIX}/generate`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      responseType: "blob",
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error generating resume:", error);
-    return null;
-  }
+  const response = await axios.post(`${API_PREFIX}/generate`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    responseType: "blob",
+  });
+  return response.data;
 }
 
-export { generateResume };
+async function sendContactInfo({ name, email, subject, message }) {
+  const response = await axios.post(`${API_PREFIX}/contact-info`, {
+    name,
+    email,
+    subject,
+    message,
+  });
+  return response.data;
+}
+
+export { generateResume, sendContactInfo };
