@@ -26,6 +26,7 @@ const sendContactInfo = async (req: Request, res: Response) => {
       message: "Contact info sent successfully",
     });
   } catch (error) {
+    console.error("Failed to send contact info:", error);
     throw new AppError("Failed to send contact info. Please try again.", 500);
   }
 };
