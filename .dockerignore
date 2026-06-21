@@ -1,0 +1,26 @@
+# Dependencies — never needed in build context (builder stage runs npm install itself)
+node_modules
+**/node_modules
+
+# Build output
+dist
+**/dist
+
+# Local env files — never bake secrets into images
+.env
+**/.env
+.env.*
+
+# Dev tooling
+.git
+.gitignore
+.nvmrc
+*.md
+docs/
+
+# Frontend — only the server is built into this image
+apps/web/
+
+# Misc
+.DS_Store
+*.log
