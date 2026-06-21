@@ -4,8 +4,10 @@ FROM node:22-alpine AS builder
 WORKDIR /app/apps/server
 
 # Install all deps (including devDeps needed for tsc)
+# Note: using npm install (not npm ci) because this is a monorepo — the root
+# package-lock.json isn't copied into the build context, only the server's package.json.
 COPY apps/server/package*.json ./
-RUN npm ci
+RUN npm install
 
 # Copy source and compile
 COPY apps/server/src ./src
@@ -27,7 +29,7 @@ ENV NODE_ENV=production
 
 # Install only production dependencies (no devDeps = smaller image)
 COPY apps/server/package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Copy compiled output from builder
 COPY --from=builder /app/apps/server/dist ./dist
