@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /result
+
+# Sitemap location (update domain if your production domain differs)
+Sitemap: https://resumeforge.com/sitemap.xml
+
