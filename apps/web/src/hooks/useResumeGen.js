@@ -15,8 +15,12 @@ const useResumeGen = () => {
       const response = await generateResume(file, jobDescription);
       setSuccess(true);
       return response;
-    } catch (error) {
-      setError(error || "Failed to generate resume");
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to generate resume. Please try again.";
+      setError(message);
     } finally {
       setLoading(false);
     }

@@ -31,7 +31,9 @@ export default function Snackbar({
             Failed to Generate
           </p>
           <p className="font-body text-sm text-on-surface leading-snug">
-            {message}
+            {typeof message === "string"
+              ? message
+              : message?.message || "An unexpected error occurred. Please try again."}
           </p>
         </div>
 
