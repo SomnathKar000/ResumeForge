@@ -60,10 +60,10 @@ export default function Contact() {
               builder.
             </p>
             <a
-              className="text-primary font-semibold text-sm hover:underline"
-              href="mailto:support@resumeforge.com"
+              className="text-primary font-semibold text-sm hover:underline block truncate"
+              href="mailto:contact.somnathkar@gmail.com?subject=ResumeForge%20Support"
             >
-              support@resumeforge.com
+              contact.somnathkar@gmail.com
             </a>
           </div>
 
@@ -84,10 +84,10 @@ export default function Contact() {
               Found something broken? Let us know so we can fix it immediately.
             </p>
             <a
-              className="text-secondary font-semibold text-sm hover:underline"
-              href="mailto:bugs@resumeforge.com"
+              className="text-secondary font-semibold text-sm hover:underline block truncate"
+              href="mailto:contact.somnathkar@gmail.com?subject=ResumeForge%20Bug%20Report"
             >
-              bugs@resumeforge.com
+              contact.somnathkar@gmail.com
             </a>
           </div>
 
@@ -108,10 +108,10 @@ export default function Contact() {
               Tell us what features you want next or how we can improve.
             </p>
             <a
-              className="text-tertiary font-semibold text-sm hover:underline"
-              href="mailto:feedback@resumeforge.com"
+              className="text-tertiary font-semibold text-sm hover:underline block truncate"
+              href="mailto:contact.somnathkar@gmail.com?subject=ResumeForge%20Feedback"
             >
-              feedback@resumeforge.com
+              contact.somnathkar@gmail.com
             </a>
           </div>
 
