@@ -67,7 +67,7 @@ If the incident involves an actual or suspected breach of personal data (e.g., i
   - Nature and scope of the personal data breach.
   - Number of Data Principals affected.
   - Potential consequences and remedial measures deployed.
-  - Contact details of the Grievance Officer (`grievance@resumeforge.com`).
+  - Contact details of the Grievance Officer (`contact.somnathkar@gmail.com`).
 - Transmit individual breach notifications to affected users where applicable.
 
 ---
@@ -89,7 +89,7 @@ Subject: [INCIDENT REPORT] Cybersecurity Incident - ResumeForge - <Incident Type
 2. Point of Contact:
    - Contact Person: Somnath Kar (or Designated Incident Commander)
    - Designation: Technical Lead / Security Contact
-   - Email: support@resumeforge.com / grievance@resumeforge.com
+   - Email: contact.somnathkar@gmail.com
    - Phone: [Contact Number]
 
 3. Incident Specifics:

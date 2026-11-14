@@ -128,14 +128,14 @@ export default function Contact() {
             <h3 className="font-headline text-xl font-bold text-white mb-2">
               Grievance Officer
             </h3>
-            <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
-              Statutory redressal under India's DPDP Act, 2023 &amp; IT Rules, 2021.
+            <p className="text-on-surface-variant text-sm mb-4 leading-relaxed">
+              Somnath Kar (Officer) • DPDP Act, 2023 &amp; IT Rules, 2021.
             </p>
             <a
               className="text-primary font-semibold text-sm hover:underline block truncate"
-              href="mailto:grievance@resumeforge.com"
+              href="mailto:contact.somnathkar@gmail.com"
             >
-              grievance@resumeforge.com
+              contact.somnathkar@gmail.com
             </a>
             <span className="text-[10px] uppercase text-on-surface-variant mt-2 block tracking-wider">
               Ack: 24h • Resolve: 15d

@@ -176,8 +176,8 @@ export default function Privacy() {
             </p>
 
             <div className="bg-[#111111] p-6 rounded-xl border border-outline-variant/20 space-y-3 text-sm">
-              <p><strong className="text-white">Name / Designation:</strong> Grievance Officer, ResumeForge</p>
-              <p><strong className="text-white">Email Address:</strong> <a href="mailto:grievance@resumeforge.com" className="text-primary hover:underline font-semibold">grievance@resumeforge.com</a></p>
+              <p><strong className="text-white">Name / Designation:</strong> Somnath Kar (Grievance Officer, ResumeForge)</p>
+              <p><strong className="text-white">Email Address:</strong> <a href="mailto:contact.somnathkar@gmail.com" className="text-primary hover:underline font-semibold">contact.somnathkar@gmail.com</a></p>
               <p><strong className="text-white">Alternative Contact:</strong> <Link to="/contact" className="text-primary hover:underline">Contact Support Desk</Link></p>
               <p><strong className="text-white">Acknowledgment Timeline:</strong> Within 24 hours of receiving the grievance.</p>
               <p><strong className="text-white">Resolution Timeline:</strong> Within 15 days from the date of receipt.</p>
@@ -190,7 +190,7 @@ export default function Privacy() {
               8. Contact Us
             </h2>
             <p>
-              If you have any questions or feedback regarding this Privacy Policy or our data handling practices, please contact our team at <a href="mailto:support@resumeforge.com" className="text-primary hover:underline font-semibold">support@resumeforge.com</a>.
+              If you have any questions or feedback regarding this Privacy Policy or our data handling practices, please contact our team at <a href="mailto:contact.somnathkar@gmail.com" className="text-primary hover:underline font-semibold">contact.somnathkar@gmail.com</a>.
             </p>
           </section>
         </article>

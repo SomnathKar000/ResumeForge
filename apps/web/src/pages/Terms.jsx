@@ -112,8 +112,8 @@ export default function Terms() {
               For any grievances regarding content, data handling, or terms compliance, please contact our designated Grievance Officer:
             </p>
             <div className="bg-[#111111] p-6 rounded-xl border border-outline-variant/20 text-sm space-y-2">
-              <p><strong className="text-white">Grievance Officer:</strong> Grievance Officer, ResumeForge</p>
-              <p><strong className="text-white">Email:</strong> <a href="mailto:grievance@resumeforge.com" className="text-primary hover:underline">grievance@resumeforge.com</a></p>
+              <p><strong className="text-white">Grievance Officer:</strong> Somnath Kar (Grievance Officer, ResumeForge)</p>
+              <p><strong className="text-white">Email:</strong> <a href="mailto:contact.somnathkar@gmail.com" className="text-primary hover:underline">contact.somnathkar@gmail.com</a></p>
               <p><strong className="text-white">Statutory Response Window:</strong> Acknowledged within 24 hours; resolved within 15 days.</p>
             </div>
           </section>
