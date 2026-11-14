@@ -41,7 +41,7 @@ export default function Contact() {
         </section>
 
         {/* Info Cards Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-32">
           {/* General Support */}
           <div
             className="bg-[#111111] p-8 rounded-xl group hover:bg-surface-container transition-all duration-300"
@@ -113,6 +113,33 @@ export default function Contact() {
             >
               feedback@resumeforge.com
             </a>
+          </div>
+
+          {/* Grievance Redressal (India IT Rules & DPDP) */}
+          <div
+            className="bg-[#111111] p-8 rounded-xl group hover:bg-surface-container transition-all duration-300"
+            style={{ border: "1px solid rgba(70, 69, 85, 0.15)" }}
+          >
+            <div className="w-12 h-12 bg-on-primary-container/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <span className="material-symbols-outlined text-primary">
+                gavel
+              </span>
+            </div>
+            <h3 className="font-headline text-xl font-bold text-white mb-2">
+              Grievance Officer
+            </h3>
+            <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">
+              Statutory redressal under India's DPDP Act, 2023 &amp; IT Rules, 2021.
+            </p>
+            <a
+              className="text-primary font-semibold text-sm hover:underline block truncate"
+              href="mailto:grievance@resumeforge.com"
+            >
+              grievance@resumeforge.com
+            </a>
+            <span className="text-[10px] uppercase text-on-surface-variant mt-2 block tracking-wider">
+              Ack: 24h • Resolve: 15d
+            </span>
           </div>
         </section>
 

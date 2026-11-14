@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import useResumeGen from "../hooks/useResumeGen";
@@ -135,12 +135,12 @@ export default function Home() {
           </p>
         )}
 
-        {/* Action Button */}
-        <div className="flex justify-center mb-24">
+        {/* Action Button & Consent Notice */}
+        <div className="flex flex-col items-center justify-center mb-24">
           <button
             onClick={handleGenerateClick}
             disabled={loading}
-            className="w-full md:w-auto min-w-[320px] bg-on-primary-container text-surface-container-lowest font-headline text-lg font-bold py-5 px-12 rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-primary/10 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+            className="w-full md:w-auto min-w-[320px] bg-on-primary-container text-surface-container-lowest font-headline text-lg font-bold py-5 px-12 rounded-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-2xl shadow-primary/10 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100 mb-4"
           >
             {loading ? (
               <>
@@ -161,6 +161,18 @@ export default function Home() {
               </>
             )}
           </button>
+
+          <p className="font-body text-xs text-on-surface-variant text-center max-w-lg leading-relaxed">
+            By clicking Generate, you confirm you are 18+ and consent to ResumeForge processing your resume in-memory via Google Gemini AI solely to tailor and format your resume. We never store your resume files. View our{" "}
+            <Link to="/privacy" className="text-primary hover:underline font-medium">
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link to="/terms" className="text-primary hover:underline font-medium">
+              Terms of Service
+            </Link>
+            .
+          </p>
         </div>
 
         {/* Feature Grid (Editorial Style) */}
